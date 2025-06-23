@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ekstraktor Data KTP By ADMIN PG LESTARI</title>
+    <title>Ekstraktor KTP By ADMIN TAN PG LESTARI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -45,6 +45,11 @@
             0% { top: 5%; }
             50% { top: 95%; }
             100% { top: 5%; }
+        }
+        #confirm-modal {
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -142,6 +147,18 @@
             <p class="text-sm text-gray-500">@admintanamanpglestari</p>
         </footer>
     </div>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="confirm-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Konfirmasi Penghapusan</h3>
+            <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus semua data yang telah terkumpul?</p>
+            <div class="flex justify-end gap-4">
+                <button id="modal-cancel" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Batal</button>
+                <button id="modal-confirm" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
     
     <script type="module">
         // --- DOM Element References ---
@@ -159,6 +176,10 @@
         const dataCounter = document.getElementById('data-counter');
         const exportCsvButton = document.getElementById('export-csv');
         const clearDataButton = document.getElementById('clear-data');
+        const confirmModal = document.getElementById('confirm-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalCancelButton = document.getElementById('modal-cancel');
+        const modalConfirmButton = document.getElementById('modal-confirm');
 
         // --- State ---
         let allExtractedData = [];
@@ -179,7 +200,14 @@
         uploadArea.addEventListener('drop', handleDrop, false);
 
         exportCsvButton.addEventListener('click', exportToCsv);
-        clearDataButton.addEventListener('click', clearAllData);
+        clearDataButton.addEventListener('click', showClearDataModal);
+        modalCancelButton.addEventListener('click', hideClearDataModal);
+        modalConfirmButton.addEventListener('click', () => {
+            allExtractedData = [];
+            displayAllResults();
+            hideClearDataModal();
+        });
+
 
         // --- Core Functions ---
         
@@ -339,11 +367,25 @@
             document.body.removeChild(link);
         }
         
+        function showClearDataModal() {
+            if (allExtractedData.length === 0) return;
+            confirmModal.style.display = 'flex';
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function hideClearDataModal() {
+            modalContent.classList.add('scale-95', 'opacity-0');
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            setTimeout(() => {
+                confirmModal.style.display = 'none';
+            }, 300); // Wait for transition to finish
+        }
+
         function clearAllData() {
-            if (confirm("Apakah Anda yakin ingin menghapus semua data yang telah terkumpul?")) {
-                allExtractedData = [];
-                displayAllResults();
-            }
+            showClearDataModal();
         }
         
         // --- UI Helper Functions ---
