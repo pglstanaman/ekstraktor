@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ekstraktor KTP By ADMIN TAN PG LESTARI</title>
+    <title>Ekstraktor Data KTP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -57,7 +57,7 @@
 
     <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-7xl">
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Ekstraktor KTP By Admin Tanaman LS</h1>
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Ekstraktor Data KTP</h1>
             <p class="mt-2 text-md sm:text-lg text-gray-600">Unggah beberapa foto KTP untuk mengumpulkan data dan mengekspornya ke dalam satu file Excel.</p>
         </header>
 
@@ -269,7 +269,9 @@
             };
 
             try {
-                const apiKey = "";
+                // PENTING: Ganti dengan Kunci API Anda sendiri agar berfungsi di GitHub
+                const apiKey = "AIzaSyCWLcn-bfU56FeXmY5RgJhFA9Gxf07Ky24"; 
+                
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
                 
                 const response = await fetch(apiUrl, {
@@ -298,7 +300,7 @@
 
             } catch (error) {
                 console.error("Error processing KTP:", error);
-                showError("Gagal memproses gambar. Pastikan gambar KTP jelas dan coba lagi.");
+                showError(error.message);
             } finally {
                 // Reset UI for next upload
                 uploadArea.classList.remove('hidden');
